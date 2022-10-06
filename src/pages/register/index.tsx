@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
@@ -13,8 +13,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { AuthContext } from "../../context/AuthContext";
+import { canSSRGuest } from "../../utils/canSSRGuest";
 
 export default function Register() {
+  const { signUp } = useContext(AuthContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +26,17 @@ export default function Register() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
-  function handleRegister() {
-    alert("teste");
+  async function handleRegister() {
+    if (name === "" || email === "" || password === "") {
+      alert("revise todos os campos não preenchidos!");
+      return;
+    }
+
+    await signUp({
+      name,
+      email,
+      password,
+    });
   }
 
   return (
@@ -123,3 +136,9 @@ export default function Register() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
