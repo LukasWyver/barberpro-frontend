@@ -1,18 +1,52 @@
+import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import Router from "next/router";
 import { Sidebar } from "../../../components/sidebar";
 import {
   Button,
   Flex,
+  FormControl,
+  FormHelperText,
   Heading,
   Input,
+  InputGroup,
+  InputLeftElement,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronLeft, FiScissors } from "react-icons/fi";
+import { canSSRAuth } from "../../../utils/canSSRAuth";
+import { setupAPIClient } from "../../../services/api";
 
-export default function NewHaircut() {
+interface NewHaircutProps {
+  subscription: boolean;
+  count: number;
+}
+
+export default function NewHaircut({ subscription, count }: NewHaircutProps) {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+
+  async function handleRegister() {
+    if (name === "" || price === "") {
+      return;
+    }
+
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.post("/haircut", {
+        name: name,
+        price: Number(price),
+      });
+      Router.push("/haircuts");
+    } catch (err) {
+      console.log(err);
+      alert("Erro ao cadastrar este modelo");
+    }
+  }
 
   return (
     <>
@@ -69,42 +103,113 @@ export default function NewHaircut() {
             <Heading mb={4} color="white" fontSize={isMobile ? "22px" : "3xl"}>
               Cadastrar modelo
             </Heading>
-            <Input
-              mb={3}
-              w="85%"
-              size="lg"
-              type="text"
-              color="white"
-              bg="gray.900"
-              borderColor="gray.800"
-              placeholder="Nome do corte"
-              _hover={{ borderColor: "gray.700" }}
-            />
-            <Input
-              mb={4}
-              w="85%"
-              size="lg"
-              type="text"
-              color="white"
-              bg="gray.900"
-              borderColor="gray.800"
-              placeholder="Valor do corte ex: R$ 59,90"
-              _hover={{ borderColor: "gray.700" }}
-            />
+            <InputGroup w="85%">
+              <InputLeftElement
+                pointerEvents="none"
+                color="barber.100"
+                fontSize="1.2em"
+                pt={2}
+              >
+                <FiScissors />
+              </InputLeftElement>
+              <Input
+                mb={3}
+                size="lg"
+                type="text"
+                value={name}
+                color="white"
+                bg="gray.900"
+                borderColor="gray.800"
+                placeholder="Nome do corte"
+                _hover={{ borderColor: "gray.700" }}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup w="85%">
+              <FormControl>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="#31FB6A"
+                  fontSize="1.2em"
+                  pt={2}
+                >
+                  $
+                </InputLeftElement>
 
+                <Input
+                  pl={10}
+                  size="lg"
+                  type="text"
+                  value={price}
+                  color="white"
+                  bg="gray.900"
+                  borderColor="gray.800"
+                  placeholder="Preço do corte"
+                  _hover={{ borderColor: "gray.700" }}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+                <FormHelperText mb={4}>
+                  por favor, utilize &#00698; ponto &#00698; ao invés de
+                  &#00698; vírgula &#00698;, obrigado.
+                </FormHelperText>
+              </FormControl>
+            </InputGroup>
             <Button
               mb={6}
               w="85%"
               size="lg"
               color="gray.900"
               bg="button.cta"
+              onClick={handleRegister}
               _hover={{ bg: "#ffb13e" }}
+              disabled={!subscription && count >= 3 ? true : false}
             >
               Cadastrar
             </Button>
+            {!subscription && count >= 3 && (
+              <Flex direction="row" align="center" justifyContent="center">
+                <Text color="white">Você atingiu seu limite de corte,</Text>
+                <Link href="/planos">
+                  <Text
+                    fontWeight="bold"
+                    color="#31FB6A"
+                    cursor="pointer"
+                    mx={1}
+                  >
+                    seja premium
+                  </Text>
+                </Link>
+                <Text color="white"> e tenha acesso ilimitado.</Text>
+              </Flex>
+            )}
           </Flex>
         </Flex>
       </Sidebar>
     </>
   );
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  try {
+    const apiClient = setupAPIClient(ctx);
+    const response = await apiClient.get("/haircut/check");
+    const count = await apiClient.get("/haircut/count");
+
+    return {
+      props: {
+        subscription:
+          response.data?.subscriptions?.status === "active" ? true : false,
+        count: count.data,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+});
