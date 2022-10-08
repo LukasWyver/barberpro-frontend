@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { AuthContext } from "../../context/AuthContext";
@@ -25,13 +26,36 @@ export default function Login() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
+  const toast = useToast();
+
   async function handleLogin() {
     if (email === "" || password === "") {
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `revise todos os campos não preenchidos!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
     await signIn({
       email,
       password,
+    });
+
+    // alert: sucesso
+    toast({
+      title: "Olá, tudo bem?.",
+      description: `login realizado com sucesso.`,
+      status: "success",
+      position: "top",
+      size: "sm",
+      duration: 3000,
+      isClosable: true,
     });
   }
 
@@ -96,21 +120,33 @@ export default function Login() {
           </InputGroup>
 
           <Button
-            background="button.cta"
             mb={6}
-            color="gray.900"
             size="lg"
-            _hover={{ bg: "#ffb13e" }}
+            color="gray.900"
             onClick={handleLogin}
+            background="button.cta"
+            _hover={{ bg: "#ffb13e" }}
+            _active={{ color: "gray.800" }}
           >
             Acessar
           </Button>
 
           <Center mt={2}>
             <Link href="/register">
-              <Text color="white" cursor="pointer">
-                Ainda não possui conta? <strong>Cadastre-se</strong>
-              </Text>
+              <Flex>
+                <Text color="white" cursor="pointer">
+                  Ainda não possui conta?
+                </Text>
+                <Text
+                  ml={1}
+                  color="white"
+                  cursor="pointer"
+                  fontWeight="bold"
+                  _hover={{ color: "#ffb13e" }}
+                >
+                  Cadastre-se
+                </Text>
+              </Flex>
             </Link>
           </Center>
         </Flex>

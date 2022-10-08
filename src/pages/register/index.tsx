@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { AuthContext } from "../../context/AuthContext";
@@ -26,9 +27,20 @@ export default function Register() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
+  const toast = useToast();
+
   async function handleRegister() {
     if (name === "" || email === "" || password === "") {
-      alert("revise todos os campos não preenchidos!");
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `revise todos os campos não preenchidos!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 
@@ -36,6 +48,17 @@ export default function Register() {
       name,
       email,
       password,
+    });
+
+    // alert: sucesso
+    toast({
+      title: "Eba, um novo colega!",
+      description: `${name} adicionada com sucesso.`,
+      status: "success",
+      position: "top",
+      size: "sm",
+      duration: 3000,
+      isClosable: true,
     });
   }
 
@@ -117,18 +140,30 @@ export default function Register() {
             mb={6}
             size="lg"
             color="gray.900"
-            onClick={handleRegister}
             background="button.cta"
+            onClick={handleRegister}
             _hover={{ bg: "#ffb13e" }}
+            _active={{ color: "gray.800" }}
           >
             Cadastrar
           </Button>
 
           <Center mt={2}>
             <Link href="/login">
-              <Text color="white" cursor="pointer">
-                Já possui uma conta? <strong>Faça login</strong>
-              </Text>
+              <Flex>
+                <Text color="white" cursor="pointer">
+                  Já possui uma conta?
+                </Text>
+                <Text
+                  ml={1}
+                  color="white"
+                  cursor="pointer"
+                  fontWeight="bold"
+                  _hover={{ color: "#ffb13e" }}
+                >
+                  Faça login
+                </Text>
+              </Flex>
             </Link>
           </Center>
         </Flex>

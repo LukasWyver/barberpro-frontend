@@ -1,7 +1,15 @@
 import React, { useContext, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { Flex, Text, Heading, Box, Input, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Heading,
+  Box,
+  Input,
+  Button,
+  useToast,
+} from "@chakra-ui/react";
 import { Sidebar } from "../../components/sidebar";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { AuthContext } from "../../context/AuthContext";
@@ -21,6 +29,7 @@ interface ProfileProps {
 
 export default function Profile({ user, premium }: ProfileProps) {
   const { logoutUser } = useContext(AuthContext);
+  const toast = useToast();
 
   const [name, setName] = useState(user && user?.name);
   const [endereco, setEndereco] = useState(
@@ -33,6 +42,17 @@ export default function Profile({ user, premium }: ProfileProps) {
 
   async function handleUpdateUser() {
     if (name === "") {
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `Seu cadastro não foi atualizado!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
+
       return;
     }
 
@@ -43,9 +63,29 @@ export default function Profile({ user, premium }: ProfileProps) {
         endereco: endereco,
       });
 
-      alert("Dados alterados com sucesso!");
+      // alert: sucesso
+      toast({
+        title: "Eba, mandou bem!",
+        description: `Cadastro atualizado com sucesso.`,
+        status: "success",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (err) {
       console.log(err);
+
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `Seu cadastro não foi atualizado!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }
 
@@ -163,6 +203,7 @@ export default function Profile({ user, premium }: ProfileProps) {
                 size="lg"
                 bg="button.cta"
                 _hover={{ bg: "#ffb13e" }}
+                _active={{ color: "gray.800" }}
                 onClick={handleUpdateUser}
               >
                 Salvar
@@ -177,6 +218,9 @@ export default function Profile({ user, premium }: ProfileProps) {
                 borderColor="red.500"
                 _hover={{ bg: "transparent" }}
                 onClick={handleLogout}
+                _active={{
+                  color: "red.400",
+                }}
               >
                 Sair da conta
               </Button>

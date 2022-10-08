@@ -14,6 +14,7 @@ import {
   InputLeftElement,
   Text,
   useMediaQuery,
+  useToast,
 } from "@chakra-ui/react";
 import { FiChevronLeft, FiScissors } from "react-icons/fi";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
@@ -26,9 +27,12 @@ interface NewHaircutProps {
 
 export default function NewHaircut({ subscription, count }: NewHaircutProps) {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
+  const [isTablet] = useMediaQuery("(max-width: 900px)");
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+
+  const toast = useToast();
 
   async function handleRegister() {
     if (name === "" || price === "") {
@@ -41,10 +45,32 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
         name: name,
         price: Number(price),
       });
+
+      // alert: sucesso
+      toast({
+        title: "Eba, um novo corte!",
+        description: `${name} adicionado com sucesso.`,
+        status: "success",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
+
       Router.push("/haircuts");
     } catch (err) {
       console.log(err);
-      alert("Erro ao cadastrar este modelo");
+
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `Erro ao cadastrar este corte!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }
 
@@ -129,17 +155,17 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
               <FormControl>
                 <InputLeftElement
                   pointerEvents="none"
-                  color="#31FB6A"
+                  color="barber.100"
                   fontSize="1.2em"
                   pt={2}
                 >
-                  $
+                  R$
                 </InputLeftElement>
 
                 <Input
                   pl={10}
                   size="lg"
-                  type="text"
+                  type="number"
                   value={price}
                   color="white"
                   bg="gray.900"
@@ -149,8 +175,8 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
                   onChange={(e) => setPrice(e.target.value)}
                 />
                 <FormHelperText mb={4}>
-                  por favor, utilize &#00698; ponto &#00698; ao invés de
-                  &#00698; vírgula &#00698;, obrigado.
+                  utilize &#00698; ponto &#00698; ao invés de &#00698; vírgula
+                  &#00698;
                 </FormHelperText>
               </FormControl>
             </InputGroup>
@@ -162,24 +188,35 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
               bg="button.cta"
               onClick={handleRegister}
               _hover={{ bg: "#ffb13e" }}
+              _active={{ color: "gray.800" }}
               disabled={!subscription && count >= 3 ? true : false}
             >
               Cadastrar
             </Button>
             {!subscription && count >= 3 && (
-              <Flex direction="row" align="center" justifyContent="center">
-                <Text color="white">Você atingiu seu limite de corte,</Text>
+              <Flex
+                align="center"
+                justifyContent="center"
+                direction={isTablet ? "column" : "row"}
+              >
+                <Text color="white" fontSize={isMobile ? "12px" : "md"}>
+                  Você atingiu seu limite de corte,
+                </Text>
                 <Link href="/planos">
                   <Text
                     fontWeight="bold"
                     color="#31FB6A"
                     cursor="pointer"
                     mx={1}
+                    fontSize={isMobile ? "14px" : "md"}
                   >
                     seja premium
                   </Text>
                 </Link>
-                <Text color="white"> e tenha acesso ilimitado.</Text>
+                <Text color="white" fontSize={isMobile ? "12px" : "md"}>
+                  {" "}
+                  e tenha acesso ilimitado.
+                </Text>
               </Flex>
             )}
           </Flex>
