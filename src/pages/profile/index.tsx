@@ -56,6 +56,7 @@ export default function Profile({ user, premium }: ProfileProps) {
       </Head>
       <Sidebar>
         <Flex
+          mx={4}
           direction="column"
           alignItems="flex-start"
           justifyContent="flex-start"
