@@ -36,6 +36,16 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
 
   async function handleRegister() {
     if (name === "" || price === "") {
+      // alert: erro!
+      toast({
+        title: "Ops, ...verifique!",
+        description: `Erro ao cadastrar este corte!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 

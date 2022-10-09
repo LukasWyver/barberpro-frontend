@@ -8,11 +8,15 @@ import {
   Text,
   Link as ChakraLink,
   useMediaQuery,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { IoMdPerson } from "react-icons/io";
 
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { Sidebar } from "../../components/sidebar";
+import { ModalInfo } from "../../components/modal";
+
 import { setupAPIClient } from "../../services/api";
 
 export interface ScheduleItem {
@@ -32,7 +36,61 @@ interface DashboardProps {
 
 export default function Dashboard({ schedule }: DashboardProps) {
   const [list, setList] = useState(schedule);
+  const [service, setService] = useState<ScheduleItem>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   const [isMobile] = useMediaQuery("(max-width: 500px)");
+
+  function handleOpenModal(item: ScheduleItem) {
+    setService(item);
+    onOpen();
+  }
+
+  async function handleFinish(id: string) {
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.delete("/schedule", {
+        params: {
+          schedule_id: id,
+        },
+      });
+
+      const filterItem = list.filter((item) => {
+        return item?.id !== id;
+      });
+
+      setList(filterItem);
+
+      onClose();
+
+      // alert: sucesso
+      toast({
+        title: "Eba, mais um cliente atendido!",
+        description: `Serviço finalizado com sucesso.`,
+        status: "success",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err) {
+      console.log(err);
+      onClose();
+      // alert: erro!
+
+      toast({
+        title: "Ops, ...verifique!",
+        description: `Erro ao finalizar este serviço!`,
+        status: "warning",
+        position: "top",
+        size: "sm",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
 
   return (
     <>
@@ -72,12 +130,13 @@ export default function Dashboard({ schedule }: DashboardProps) {
 
           {list.map((item) => (
             <ChakraLink
-              key={item?.id}
               m={0}
               p={0}
               mt={0}
               w="100%"
+              key={item?.id}
               bg="transparent"
+              onClick={() => handleOpenModal(item)}
               style={{ textDecoration: "none" }}
             >
               <Flex
@@ -108,6 +167,7 @@ export default function Dashboard({ schedule }: DashboardProps) {
                   direction={isMobile ? "column" : "row"}
                 >
                   <Text
+                    mr="auto"
                     color="white"
                     noOfLines={1}
                     fontWeight="bold"
@@ -125,6 +185,14 @@ export default function Dashboard({ schedule }: DashboardProps) {
           ))}
         </Flex>
       </Sidebar>
+
+      <ModalInfo
+        data={service}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        finishService={() => handleFinish(service?.id)}
+      ></ModalInfo>
     </>
   );
 }
