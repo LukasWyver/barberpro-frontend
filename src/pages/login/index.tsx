@@ -49,7 +49,7 @@ export default function Login() {
 
     // alert: sucesso
     toast({
-      title: "Olá, tudo bem?.",
+      title: "Olá, novamente.",
       description: `login realizado com sucesso.`,
       status: "success",
       position: "top",
@@ -85,7 +85,6 @@ export default function Login() {
             mb={3}
             size="lg"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
             type="email"
             color="white"
             variant="filled"
@@ -93,6 +92,8 @@ export default function Login() {
             placeholder="email@email.com"
             focusBorderColor="barber.100"
             _hover={{ bg: "barber.400" }}
+            onChange={(e) => setEmail(e.target.value)}
+            _placeholder={{ opacity: 0.5, color: "gray.500" }}
           />
 
           <InputGroup size="lg" mb={6}>
@@ -100,13 +101,14 @@ export default function Login() {
               pr="4.5rem"
               color="white"
               variant="filled"
+              value={password}
               background="barber.400"
               focusBorderColor="barber.100"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type={show ? "text" : "password"}
-              placeholder="Digite sua senha"
               _hover={{ bg: "barber.400" }}
+              placeholder="Digite sua senha"
+              type={show ? "text" : "password"}
+              onChange={(e) => setPassword(e.target.value)}
+              _placeholder={{ opacity: 0.5, color: "gray.500" }}
             />
             <InputRightElement width="4.5rem">
               <button onClick={handleClick}>

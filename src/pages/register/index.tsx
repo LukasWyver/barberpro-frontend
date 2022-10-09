@@ -88,28 +88,30 @@ export default function Register() {
             mb={3}
             size="lg"
             type="text"
+            value={name}
             color="white"
             variant="filled"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             background="barber.400"
-            placeholder="Nome da barbearia"
-            focusBorderColor="barber.100"
             _hover={{ bg: "barber.400" }}
+            focusBorderColor="barber.100"
+            placeholder="Nome da barbearia"
+            onChange={(e) => setName(e.target.value)}
+            _placeholder={{ opacity: 0.5, color: "gray.500" }}
           />
 
           <Input
+            mb={3}
             size="lg"
             type="email"
             color="white"
-            variant="filled"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            variant="filled"
             background="barber.400"
+            _hover={{ bg: "barber.400" }}
             placeholder="email@email.com"
             focusBorderColor="barber.100"
-            mb={3}
-            _hover={{ bg: "barber.400" }}
+            onChange={(e) => setEmail(e.target.value)}
+            _placeholder={{ opacity: 0.5, color: "gray.500" }}
           />
 
           <InputGroup size="lg" mb={6}>
@@ -118,12 +120,13 @@ export default function Register() {
               color="white"
               variant="filled"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
               background="barber.400"
               focusBorderColor="barber.100"
+              _hover={{ bg: "barber.400" }}
               type={show ? "text" : "password"}
               placeholder="Cadastrar uma senha"
-              _hover={{ bg: "barber.400" }}
+              onChange={(e) => setPassword(e.target.value)}
+              _placeholder={{ opacity: 0.5, color: "gray.500" }}
             />
             <InputRightElement width="4.5rem">
               <button onClick={handleClick}>

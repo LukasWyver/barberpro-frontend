@@ -130,13 +130,14 @@ export default function Profile({ user, premium }: ProfileProps) {
                 w="100%"
                 size="lg"
                 type="text"
+                value={name}
                 color="white"
                 bg="gray.900"
                 borderColor="gray.800"
                 placeholder="Nome da sua barbearia"
                 _hover={{ borderColor: "gray.700" }}
                 onChange={(e) => setName(e.target.value)}
-                value={name}
+                _placeholder={{ opacity: 0.5, color: "gray.500" }}
               />
 
               <Text mb={2} fontSize="xl" fontWeight="bold" color="white">
@@ -149,11 +150,12 @@ export default function Profile({ user, premium }: ProfileProps) {
                 type="text"
                 color="white"
                 bg="gray.900"
+                value={endereco}
                 borderColor="gray.800"
                 placeholder="Endereço da barbearia"
                 _hover={{ borderColor: "gray.700" }}
                 onChange={(e) => setEndereco(e.target.value)}
-                value={endereco}
+                _placeholder={{ opacity: 0.5, color: "gray.500" }}
               />
 
               <Text mb={2} fontSize="xl" fontWeight="bold" color="white">

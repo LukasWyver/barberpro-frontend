@@ -102,6 +102,7 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
                 alignItems="center"
                 justifyContent="center"
                 _hover={{ bg: "gray.600" }}
+                _active={{ bg: "gray.600" }}
               >
                 <FiChevronLeft size={24} color="white" />
                 Voltar
@@ -149,6 +150,7 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
                 placeholder="Nome do corte"
                 _hover={{ borderColor: "gray.700" }}
                 onChange={(e) => setName(e.target.value)}
+                _placeholder={{ opacity: 0.5, color: "gray.500" }}
               />
             </InputGroup>
             <InputGroup w="85%">
@@ -173,6 +175,7 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps) {
                   placeholder="Preço do corte"
                   _hover={{ borderColor: "gray.700" }}
                   onChange={(e) => setPrice(e.target.value)}
+                  _placeholder={{ opacity: 0.5, color: "gray.500" }}
                 />
                 <FormHelperText mb={4}>
                   utilize &#00698; ponto &#00698; ao invés de &#00698; vírgula

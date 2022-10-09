@@ -94,6 +94,7 @@ export default function Haircuts({ haircuts }: HaircutsProps) {
                 bg="gray.700"
                 color="white"
                 _hover={{ bg: "gray.600" }}
+                _active={{ bg: "gray.600" }}
               >
                 Cadastrar novo
               </Button>

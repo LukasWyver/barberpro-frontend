@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import Router from "next/router";
 import {
   Flex,
   Text,
@@ -89,6 +90,8 @@ export default function EditHaircut({
         duration: 3000,
         isClosable: true,
       });
+
+      Router.push("/haircuts");
     } catch (err) {
       console.log(err);
 
@@ -134,6 +137,7 @@ export default function EditHaircut({
                 alignItems="center"
                 justifyContent="center"
                 _hover={{ bg: "gray.600" }}
+                _active={{ bg: "gray.600" }}
               >
                 <FiChevronLeft size={24} color="white" />
                 Voltar
