@@ -179,7 +179,7 @@ export default function New({ haircuts }: NewProps) {
                 <option
                   key={item?.id}
                   value={item?.id}
-                  style={{ color: " #000" }}
+                  style={{ color: " #1B1C29", backgroundColor: " #efefef" }}
                 >
                   {item?.name}
                 </option>

@@ -240,8 +240,6 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClient = setupAPIClient(ctx);
     const response = await apiClient.get("/me");
 
-    console.log(response.data);
-
     return {
       props: {
         premium:

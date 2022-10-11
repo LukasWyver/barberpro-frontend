@@ -3,6 +3,17 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { AuthProvider } from "../context/AuthContext";
 
+const styles = {
+  global: {
+    body: {
+      color: "gray.100",
+    },
+    a: {
+      color: "white",
+    },
+  },
+};
+
 const colors = {
   barber: {
     100: "#c6c6c6",
@@ -20,7 +31,7 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({ styles, colors });
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

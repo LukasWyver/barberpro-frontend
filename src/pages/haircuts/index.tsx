@@ -129,11 +129,12 @@ export default function Haircuts({ haircuts }: HaircutsProps) {
                 mt={2}
                 w="100%"
                 rounded={4}
+                role="group"
                 bg="barber.400"
-                direction={isMobile ? "column" : "row"}
-                align={isMobile ? "flex-start" : "center"}
                 cursor="pointer"
                 justifyContent="space-between"
+                direction={isMobile ? "column" : "row"}
+                align={isMobile ? "flex-start" : "center"}
               >
                 <Flex
                   mb={isMobile ? 2 : 0}
@@ -142,12 +143,22 @@ export default function Haircuts({ haircuts }: HaircutsProps) {
                   justifyContent="center"
                 >
                   <IoMdPricetag size={28} color="#fba931" />
-                  <Text fontWeight="bold" ml={4} color="white" noOfLines={2}>
+                  <Text
+                    ml={4}
+                    noOfLines={2}
+                    fontWeight="bold"
+                    _groupHover={{ color: "white" }}
+                    color={isMobile ? "white" : "barber.100"}
+                  >
                     {haircut.name}
                   </Text>
                 </Flex>
 
-                <Text fontWeight="bold" color="white">
+                <Text
+                  fontWeight="bold"
+                  _groupHover={{ color: "white" }}
+                  color={isMobile ? "white" : "barber.100"}
+                >
                   R$ {haircut.price}
                 </Text>
               </Flex>
