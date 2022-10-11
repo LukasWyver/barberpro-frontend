@@ -144,39 +144,49 @@ export default function Dashboard({ schedule }: DashboardProps) {
                 mb={3}
                 w="100%"
                 rounded={4}
+                role="group"
                 bg="barber.400"
                 justify="space-between"
                 direction={isMobile ? "column" : "row"}
                 align={isMobile ? "flex-start" : "center"}
               >
                 <Flex
+                  flex={1}
                   align="center"
                   direction="row"
                   justify="flex-start"
                   mb={isMobile ? 2 : 0}
-                  w={isMobile ? "100%" : "50%"}
                 >
                   <IoMdPerson size={28} color="#fba931" />
-                  <Text color="white" fontWeight="bold" ml={4} noOfLines={1}>
+                  <Text
+                    ml={4}
+                    noOfLines={1}
+                    fontWeight="bold"
+                    _groupHover={{ color: "white" }}
+                    color={isMobile ? "white" : "barber.100"}
+                  >
                     {item?.customer}
                   </Text>
                 </Flex>
 
-                <Flex
-                  w={isMobile ? "100%" : "50%"}
-                  direction={isMobile ? "column" : "row"}
-                >
+                <Flex flex={1} direction={isMobile ? "column" : "row"}>
                   <Text
                     mr="auto"
-                    color="white"
                     noOfLines={1}
                     fontWeight="bold"
                     mb={isMobile ? 2 : 0}
+                    _groupHover={{ color: "white" }}
+                    color={isMobile ? "white" : "barber.100"}
                   >
                     {item?.haircut?.name}
                   </Text>
 
-                  <Text color="white" fontWeight="bold" mb={isMobile ? 2 : 0}>
+                  <Text
+                    mb={isMobile ? 2 : 0}
+                    _groupHover={{ color: "white" }}
+                    color={isMobile ? "white" : "barber.100"}
+                    fontWeight={isMobile ? "bold" : "extrabold"}
+                  >
                     R$ {item?.haircut?.price}
                   </Text>
                 </Flex>
