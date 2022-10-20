@@ -6,6 +6,8 @@ import { FiChevronLeft } from "react-icons/fi";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 
+import { getStripeJs } from "../../services/stripe-js";
+
 interface PlanosProps {
   premium: boolean;
 }
@@ -13,6 +15,24 @@ interface PlanosProps {
 export default function Planos({ premium }: PlanosProps) {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTablet] = useMediaQuery("(max-width: 900px)");
+
+  const handleSubscribe = async () => {
+    if (premium) {
+      return;
+    }
+
+    try {
+      const apiClient = setupAPIClient();
+      const response = await apiClient.post("/subscribe");
+
+      const { sessionId } = response.data;
+
+      const stripe = await getStripeJs();
+      await stripe.redirectToCheckout({ sessionId: sessionId });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -220,6 +240,7 @@ export default function Planos({ premium }: PlanosProps) {
                     size="lg"
                     bg="button.cta"
                     color="gray.900"
+                    onClick={handleSubscribe}
                     _hover={{ bg: "#ffb13e" }}
                     _active={{ color: "gray.800" }}
                   >
